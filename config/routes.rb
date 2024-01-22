@@ -1,6 +1,18 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  namespace :admin do
+    resources :stocks
+    resources :products do
+      resources :stocks
+    end
+    resources :categories
+  end
+  devise_for :admins
 
-  # Defines the root path route ("/")
+  authenticated :admin do
+    root to: 'admin#index', as: :admin_root
+  end
+
   root "home#index"
+
+  get 'admin' => 'admin/index'
 end
